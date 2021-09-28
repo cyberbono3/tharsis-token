@@ -113,7 +113,7 @@ func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error
 	return instance, nil
 }
 
-
+// TODO test
 func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	bal, err := instance.BalanceOf(&bind.CallOpts{}, common.HexToAddress(addr))
 	if err != nil {
@@ -123,7 +123,7 @@ func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	return bal, nil
 }
 
-
+// TODO test
 func (c *Client) TransferTokens(to string, tokens *big.Int) error {
    // get contract instance 
     auth, err := c.setupTransOpts()
