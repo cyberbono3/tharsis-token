@@ -24,20 +24,16 @@ import (
 
 // queryCmd represents the query command
 var queryCmd = &cobra.Command{
-	Use:   "query",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-     token_address, address1
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "query <contract_address> <account_address> ",
+	Short: "This command queries a token balance of either contract or account address",
+	Long: `Firstly, it sets up a contract instance using a contract address provided. If it fails, it yield an error.
+	 Otherwise, the command checks the number of arguments. If it has one argument, the command queries contract token supply. 
+	 If it has 2 arguments, the command queries the balance of account address.`,
 	RunE: runQueryCmd,
 	Args: cobra.RangeArgs(1, 2),
 }
 
 func runQueryCmd(cmd *cobra.Command, args []string) error {
-
 	clientCtx, err := app.GetClientContext(cmd)
 	if err != nil {
 		return err

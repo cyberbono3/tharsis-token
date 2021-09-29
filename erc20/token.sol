@@ -1,28 +1,9 @@
 pragma solidity >=0.5.11;
 
-library SafeMath {
-    function add(uint a, uint b) public pure returns (uint c) {
-        c = a + b;
-        require(c >= a);
-    }
-    function sub(uint a, uint b) public pure returns (uint c) {
-        require(b <= a);
-        c = a - b;
-    }
-    function mul(uint a, uint b) public pure returns (uint c) {
-        c = a * b;
-        require(a == 0 || c / a == b);
-    }
-    function div(uint a, uint b) public pure returns (uint c) {
-        require(b > 0);
-        c = a / b;
-    }
-}
-
-// todo add address validation
+// @dev It is a good practice to use SafeMath.sol library here, but due to an error `Fatal: Contract has additional library references, please use other mode(e.g. --combined-json) to catch library infos` 
+// with `abigen --bin=erc20/token.bin --abi=erc20/token.abi --pkg=erc20 --out=erc20/Token.go --alias _totalSupply=TotalSupply1`
+// dealing with multiple contracts is problematic. Subsequently, I decided to remove it and add manual underflow, overflow protection
 contract Token {
-
-    using SafeMath for uint256;
 
     string public symbol;
     string public  name;
@@ -77,57 +58,25 @@ contract Token {
     // - 0 value transfers are allowed
     // ------------------------------------------------------------------------
     function transfer(address to, uint tokens) public returns (bool success) {
-        balances[msg.sender] = SafeMath.sub(balances[msg.sender], tokens);
-        balances[to] = SafeMath.add(balances[to], tokens);
+        require(to != address(0));
+        require(balances[msg.sender] >= tokens); // undeflow protection
+        require(balances[to] + tokens >= balances[to]);  // overflow protection
+
+        balances[msg.sender] -= tokens;
+        balances[to] += tokens;
+        
         emit Transfer(msg.sender, to, tokens);
         return true;
     }
 
-
-    // ------------------------------------------------------------------------
-    // Token owner can approve for spender to transferFrom(...) tokens
-    // from the token owner's account
-    //
-    // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
-    // recommends that there are no checks for the approval double-spend attack
-    // as this should be implemented in user interfaces 
-    // ------------------------------------------------------------------------
-    function approve(address spender, uint tokens) public returns (bool success) {
-        allowed[msg.sender][spender] = tokens;
-        emit Approval(msg.sender, spender, tokens);
-        return true;
-    }
-
-
-    // ------------------------------------------------------------------------
-    // Transfer tokens from the from account to the to account
-    // 
-    // The calling account must already have sufficient tokens approve(...)-d
-    // for spending from the from account and
-    // - From account must have sufficient balance to transfer
-    // - Spender must have sufficient allowance to transfer
-    // - 0 value transfers are allowed
-    // ------------------------------------------------------------------------
-    function transferFrom(address from, address to, uint tokens) public returns (bool success) {
-        balances[from] = SafeMath.sub(balances[from], tokens);
-        allowed[from][msg.sender] = SafeMath.sub(allowed[from][msg.sender], tokens);
-        balances[to] = SafeMath.add(balances[to], tokens);
-        emit Transfer(from, to, tokens);
-        return true;
-    }
-
-
-    // ------------------------------------------------------------------------
-    // Returns the amount of tokens approved by the owner that can be
-    // transferred to the spender's account
-    // ------------------------------------------------------------------------
-    function allowance(address tokenOwner, address spender) public view returns (uint remaining) {
-        return allowed[tokenOwner][spender];
-    }
-
-    // add safemath methods
+    
     // add address validation
-    function mint(address account, uint256 amount) internal {
+    // check for overflow using Safemath
+    function mint(address account, uint256 amount) internal onlyOwner {
+        require(account != address(0));
+        require(_totalSupply + amount >= _totalSupply);  // overflow protection
+        require(balances[account] + amount >= balances[account]);  // overflow protection
+
         _totalSupply += amount;
         balances[account] += amount;
         emit Transfer(address(0), account, amount);

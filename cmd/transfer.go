@@ -24,9 +24,9 @@ import (
 
 // transferCmd represents the transfer command
 var transferCmd = &cobra.Command{
-	Use:   "transfer",
-	Short: "Transfer tokens between two accounts ",
-	Long: `Transfer tokens between two accounts that can be minted using deployed ERC-20 contract`,
+	Use:   "transfer <to> <tokens>",
+	Short: "Transfer tokens from owner to receiver",
+	Long: `Firstly, contract tokens `,
 	RunE: runTransferCmd,
 	Args: cobra.ExactArgs(2),
 }

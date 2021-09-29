@@ -24,14 +24,10 @@ import (
 
 // deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "deploy <mnemonic words>",
+	Short: "deploy deploys a contract at Ethermint node",
+	Long: `deploy uses mnemonic words to derive a private key. This private key is used to yield a public key and Ethereum address. 
+	This Ethereum account acts as a fromAccount and pays gas costs to deploy a contract.`,
 	RunE: runDeployCmd,
 	Args: cobra.ExactArgs(24),
 }

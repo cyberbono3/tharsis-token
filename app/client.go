@@ -22,8 +22,8 @@ const(
 	value = 300
 
 	rpcEndpoint = "http://0.0.0.0:8545"
-	ContractAddr = "0x2A41ea95F96A87dC21f9F0dfD1f9848357D9149a"
-	mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
+	ContractAddr = "0xd3C2901CE8AfF95176C7812DA97235238D419D0F"
+	Mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
 )
 
 type Client struct {
@@ -31,6 +31,7 @@ type Client struct {
 	privateKey *ecdsa.PrivateKey
 }
 
+// consider tocdelete mnemonic
 func NewClient(mnemonic string) (*Client, error) {
 	ethClient, err := initEthClient(rpcEndpoint)
 	if err != nil {
@@ -123,6 +124,14 @@ func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	return bal, nil
 }
 
+// check the ba
+func (c *Client) MintTokensOnOwner(tokens *big.Int) {
+
+
+}
+
+
+
 // TODO test
 func (c *Client) TransferTokens(to string, tokens *big.Int) error {
    // get contract instance 
@@ -145,6 +154,17 @@ func (c *Client) TransferTokens(to string, tokens *big.Int) error {
 	fmt.Printf("transfer tx sent: %s", tx.Hash().Hex()) // tx sent: 0x8d490e535678e9a24360e955d75b27ad307bdfb97a1dca51d0f3035dcee3e870
 
 	return nil
+}
+
+func (c *Client) getOwnerAddressHex() (string, error) {
+    publicKey := c.privateKey.Public()
+    publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+    if !ok {
+        return "", errors.New("error casting public key to ECDSA")
+    }
+
+    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	return fromAddress.Hex(),nil
 }
 
 

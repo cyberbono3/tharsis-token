@@ -13,7 +13,7 @@ func TestNewClient(t *testing.T) {
 		mnemomonicStr string
 		expErr        bool
 	}{
-		{"success", mnemonic, false},
+		{"success", Mnemonic, false},
 		{"invalid mnemonic", "error", true},
 		{"empty mnemonic", "", true},
 	}
@@ -64,7 +64,7 @@ type IntegrationTestSuite struct {
 }
 
 func (s *IntegrationTestSuite) SetupSuite() {
-	client, err := NewClient(mnemonic)
+	client, err := NewClient(Mnemonic)
 	s.Require().NoError(err)
 
 	s.client = client
@@ -76,7 +76,7 @@ func (s *IntegrationTestSuite) TestDeployContract() {
 	ethClient, err := initEthClient(rpcEndpoint)
 	s.Require().NoError(err)
 
-	privKey, err := privKeyFromMnemonic(mnemonic)
+	privKey, err := privKeyFromMnemonic(Mnemonic)
 	s.Require().NoError(err)
 
 
