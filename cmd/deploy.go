@@ -33,7 +33,6 @@ var deployCmd = &cobra.Command{
 }
 
 func runDeployCmd(_ *cobra.Command, args []string) error {
-	// mnemonic := "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
 	mnemonic := strings.Join(args, " ")
 	client, err := app.NewClient(mnemonic)
 	if err != nil {

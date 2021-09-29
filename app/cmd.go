@@ -22,10 +22,11 @@ func getClientContextFromCmd(cmd *cobra.Command) Context {
 	return Context{}
 }
 
+// GetClientContext checks if Context.Client field is empty. In this case it puts a new Client on this field and returns Context.
 func GetClientContext(cmd *cobra.Command) (Context, error) {
 	ctx := getClientContextFromCmd(cmd)
 	if ctx.Client == nil {
-		client, err := NewClient(mnemonic)
+		client, err := NewClient(Mnemonic)
 		if err != nil {
 			return ctx, err
 		}

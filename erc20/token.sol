@@ -12,11 +12,8 @@ contract Token {
     address public owner;
 
     mapping(address => uint) balances;
-    mapping(address => mapping(address => uint)) allowed;
 
     event Transfer(address indexed from, address indexed to, uint tokens);
-    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
-
     // TODO set onlyOwner
     // ------------------------------------------------------------------------
     // Constructor

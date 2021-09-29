@@ -31,7 +31,8 @@ type Client struct {
 	privateKey *ecdsa.PrivateKey
 }
 
-// consider tocdelete mnemonic
+// TODO consider tocdelete mnemonic argument
+// NewClient sets up a Client that contains ethClient and privKey
 func NewClient(mnemonic string) (*Client, error) {
 	ethClient, err := initEthClient(rpcEndpoint)
 	if err != nil {
@@ -46,7 +47,7 @@ func NewClient(mnemonic string) (*Client, error) {
 	return &Client{ethClient, privKey}, nil
 }
 
-
+// setupTransOpts yields an auth object that holds transaction options
 func (c *Client) setupTransOpts() (*bind.TransactOpts, error) {
 	publicKeyECDSA, ok := c.privateKey.Public().(*ecdsa.PublicKey)
     if !ok {
@@ -76,7 +77,7 @@ func (c *Client) setupTransOpts() (*bind.TransactOpts, error) {
 	return auth, nil
 }
 
-// returns instance, contractAddrStr, error
+// DeployContract deploys ERC-20 contract using privateKey and ethClient that are stored on Client.
 func (c *Client) DeployContract() error {
 	if c.privateKey == nil {
 		return errors.New("privateKey is nil")
@@ -103,7 +104,7 @@ func (c *Client) DeployContract() error {
 	return nil
 }
 
-
+// GetContractInstance yields an contract instance from contract hex string. 
 func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error)   {
 	address := common.HexToAddress(contractHexStr)
 	instance, err := erc20.NewErc20(address, c.ethClient)
@@ -115,6 +116,7 @@ func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error
 }
 
 // TODO test
+// DisplayTokenBalance invokes BalanceOf solidity function on contract instance and  address provided. it outputs *big.Int in success case and error otherwise.
 func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	bal, err := instance.BalanceOf(&bind.CallOpts{}, common.HexToAddress(addr))
 	if err != nil {
@@ -124,15 +126,8 @@ func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	return bal, nil
 }
 
-// check the ba
-func (c *Client) MintTokensOnOwner(tokens *big.Int) {
 
-
-}
-
-
-
-// TODO test
+// TODO fix it - this is incorrect implemntation, see https://goethereumbook.org/transfer-tokens/ for more details
 func (c *Client) TransferTokens(to string, tokens *big.Int) error {
    // get contract instance 
     auth, err := c.setupTransOpts()
@@ -156,7 +151,8 @@ func (c *Client) TransferTokens(to string, tokens *big.Int) error {
 	return nil
 }
 
-func (c *Client) getOwnerAddressHex() (string, error) {
+// deriveOwnerAddressHexStr derives owner's address from private key that is stored on Client
+func (c *Client) deriveOwnerAddressHexStr() (string, error) {
     publicKey := c.privateKey.Public()
     publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
     if !ok {
@@ -167,7 +163,7 @@ func (c *Client) getOwnerAddressHex() (string, error) {
 	return fromAddress.Hex(),nil
 }
 
-
+// initEthClient sets up ethClient based on rpcEndpoint provided
 func initEthClient(rpcEndpoint string) (*ethclient.Client, error) {
 	client, err := ethclient.Dial(rpcEndpoint)
 	if err != nil {
@@ -179,7 +175,7 @@ func initEthClient(rpcEndpoint string) (*ethclient.Client, error) {
 
 
 
-// add godoc
+// privKeyFromMnemonic derives a private key from mnemonic phrase
 func privKeyFromMnemonic(mnemonic string) (*ecdsa.PrivateKey, error) {
 	wallet, err := hdwallet.NewFromMnemonic(mnemonic)
 	if err != nil {

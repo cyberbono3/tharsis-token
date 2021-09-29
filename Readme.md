@@ -1,4 +1,4 @@
-# Tharsis coding challenge
+# Tharsis coding challenge (WIP)
 
 This application  written in Go exposes CLI commands for quering and transfering tokens using ERC-20 contract deployed on Ethermint local node.
 
@@ -40,7 +40,7 @@ make install
 2. Complile ERC-20 contract using solc and abigen following Ethereum book [guide](https://goethereumbook.org/smart-contract-compile/)
 
 ```
-go get -u github.com/ethereum/go-ethereum
+git clone github.com/ethereum/go-ethereum.git
 cd $GOPATH/src/github.com/ethereum/go-ethereum/
 make
 make devtools
@@ -54,20 +54,20 @@ abigen --bin=erc20/token.bin --abi=erc20/token.bin --pkg=erc20 --out=erc20/Token
 
 ### Deploy ERC-20 contract
 
-1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token 
+1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Deploy Erc-20 [token](https://github.com/cyberbono3/tharsis-token/blob/master/erc20/token.sol) on Ethermint using `token deploy <mnemonic words>` command and saved `mnemonic` words from Ethermint Preparation Step 3. You can read full desciption about `deploy` command [here](https://github.com/cyberbono3/tharsis-token/blob/master/cmd/deploy.go)
 ```
 token deploy sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness
 ```
 3. See deployment confirmation that look like that:
 ```
-contract has been successfully deployed at:  0xd3C2901CE8AfF95176C7812DA97235238D419D0F
-tx hex 0x91004fe4f5b26096bcbe3e385c39ce1778532bae50e7a554387278956e8a3d53
+contract has been successfully deployed at:  0x08F469C71BB15374Dcf5201Df3983D41D418f57a
+tx hex 0xf91011e262de34b96761cb115638939de7e8c2180ed780e99e9b8ffb522d231f
 deploy called
 ```
 4. Hardcode contract address and mnemonic in `app/client.go` 
 ```
-ContractAddr = "0x9491f4c3f45956903FCD1Abbf404097a82995072"
+ContractAddr = "0x08F469C71BB15374Dcf5201Df3983D41D418f57a"
 Mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
 ```
 This is some UX issue for a client. You can fix it by implementing CLI commands or using config file. I keep it out of scope of this task due to lack of time.
@@ -76,13 +76,10 @@ This is some UX issue for a client. You can fix it by implementing CLI commands 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Query token balance of a contract or any account address by running `token query <contract_address> <account_address>`
 ```
-token query 0xd3C2901CE8AfF95176C7812DA97235238D419D0F
+token query 0x08F469C71BB15374Dcf5201Df3983D41D418f57a
 ```
 3. It should output a total supply of contract,
-```
-token query 00xd3C2901CE8AfF95176C7812DA97235238D419D0F
-```
-4. Unfortunately, it yields an error 
+4. Unfortunately, it yields an error: 
 ```
 Error: TotalSupply1 err: "no contract code at given address"
 ```
@@ -115,16 +112,18 @@ function transfer(address to, uint tokens) public returns (bool success) {
 token trasfer <to_address> <tokens>
 
 ```
+### TODO
+* Address and test corner cases in transfer scenario :
+	1. No value to pay for a gas to run `transfer tokens transaction`
+	2. Transaction execution fails if `to` is 0 address.
+	3. Transaction execution fails if `balances[msg.sender]` < `tokens`
+	4. Transaction execution fails if `balances[to]` + `tokens` < `balances[to]`
 
-#### Corner cases in transfer scenario that has to be addressed and tested:
-1. No value to pay for a gas to run `transfer tokens transaction`
-2. Transaction execution fails if `to` is 0 address.
-3. Transaction execution fails if `balances[msg.sender]` < `tokens`
-4. Transaction execution fails if `balances[to]` + `tokens` < `balances[to]`
+* Add cobra CLI tests `deploy_test.go`,`query_test.go`,`transfer_test.go`,`name_test.go`
 
+* Add more testing 
 
-
-
+* Fix `token name` error
 
 
 
