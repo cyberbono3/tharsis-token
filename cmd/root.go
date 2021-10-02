@@ -29,7 +29,7 @@ var cfgFile string
 var RootCmd = &cobra.Command{
 	Use:   "token",
 	Short: "token is client application for querying and transferring tokens",
-	Long: `token is client application for querying and transferring tokens`,
+	Long:  `token is client application for querying and transferring tokens`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -44,7 +44,7 @@ func Execute() {
 	}
 }
 
-func init() { 
+func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.

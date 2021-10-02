@@ -15,57 +15,52 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+
 	"github.com/tharsis/token/app"
 )
 
-// nameCmd represents the name command
-var nameCmd = &cobra.Command{
-	Use:   "name",
-	Short: "A brief description of your command",
+// mintCmd represents the mint command
+var mintCmd = &cobra.Command{
+	Use:   "mint <ethereum_address> <amount> ",
+	Short: "Mint <amount> of tokens in <ethereum address> ",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	RunE: func(cmd *cobra.Command, _ []string) error {
-		clientCtx, err := app.GetClientContext(cmd)
-		if err != nil {
-			return err
-		}
+	RunE: runMintCmd,
+	Args: cobra.ExactArgs(2),
+}
 
-		instance, err := clientCtx.Client.GetContractInstance(app.ContractAddr)
-		if err != nil {
-			return err
-		}
+func runMintCmd(cmd *cobra.Command, args []string) error {
 
-		name, err := instance.Name(nil)
-		if err != nil {
-			return err
-		}
+	clientCtx, err := app.GetClientContext(cmd)
+	if err != nil {
+		return err
+	}
 
-		fmt.Println(name) // "GOLD"
+	to := args[0]
+	amountStr := args[1]
 
-		fmt.Println("name called")
+	if err = clientCtx.Client.Mint(to, amountStr); err != nil {
+		return err
+	}
 
-		return nil
-	},
-	Args: cobra.NoArgs,
+	return nil
 }
 
 func init() {
-	RootCmd.AddCommand(nameCmd)
+	RootCmd.AddCommand(mintCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// nameCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// mintCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// nameCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// mintCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

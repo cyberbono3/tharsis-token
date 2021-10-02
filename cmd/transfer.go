@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"math/big"
 
 	"github.com/spf13/cobra"
 	"github.com/tharsis/token/app"
@@ -26,30 +25,22 @@ import (
 var transferCmd = &cobra.Command{
 	Use:   "transfer <to> <tokens>",
 	Short: "Transfer tokens from owner to receiver",
-	Long: `Firstly, contract tokens `,
-	RunE: runTransferCmd,
-	Args: cobra.ExactArgs(2),
+	Long:  `Firstly, contract tokens `,
+	RunE:  runTransferCmd,
+	Args:  cobra.ExactArgs(2),
 }
 
 func runTransferCmd(cmd *cobra.Command, args []string) error {
-	clientCtx, err := app.GetClientContext(cmd) 
+	clientCtx, err := app.GetClientContext(cmd)
 	if err != nil {
-		return err 
+		return err
 	}
 
 	client := clientCtx.Client
 	to := args[0]
 	tokens := args[1]
 
-	// convert string to *big.Int
-	n := new(big.Int)
-    n, ok := n.SetString(tokens, 10)
-    if !ok {
-        fmt.Println("SetString: error")
-        return err
-    }
-   
-	if err = client.TransferTokens(to, n); err != nil {
+	if err = client.TransferTokens(to, tokens); err != nil {
 		return err
 	}
 

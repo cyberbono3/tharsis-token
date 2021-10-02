@@ -9,4 +9,3 @@ func (ctx Context) WithClient(client *Client) Context {
 	ctx.Client = client
 	return ctx
 }
-

@@ -69,7 +69,7 @@ contract Token {
     
     // add address validation
     // check for overflow using Safemath
-    function mint(address account, uint256 amount) internal onlyOwner {
+    function mint(address account, uint256 amount) public onlyOwner {
         require(account != address(0));
         require(_totalSupply + amount >= _totalSupply);  // overflow protection
         require(balances[account] + amount >= balances[account]);  // overflow protection

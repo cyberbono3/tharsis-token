@@ -72,37 +72,35 @@ func (s *IntegrationTestSuite) SetupSuite() {
 
 func (s *IntegrationTestSuite) TestDeployContract() {
 
-
 	ethClient, err := initEthClient(rpcEndpoint)
 	s.Require().NoError(err)
 
 	privKey, err := privKeyFromMnemonic(Mnemonic)
 	s.Require().NoError(err)
 
-
 	testCases := []struct {
-		name        string
-		pretest     func()
-		expErr      bool
+		name    string
+		pretest func()
+		expErr  bool
 	}{
-		{"privateKey is empty", 
-		func() {
-			s.client.privateKey = nil
-		}, 
-		true,
+		{"privateKey is empty",
+			func() {
+				s.client.privateKey = nil
+			},
+			true,
 		},
 		{
-		"ethClient is empty",
-		func() {
-			s.client.ethClient = nil
-		}, 
-		true,
+			"ethClient is empty",
+			func() {
+				s.client.ethClient = nil
+			},
+			true,
 		},
 		{"success",
-		func() {
-			s.client = &Client{ethClient, privKey}
-		},
-		false},
+			func() {
+				s.client = &Client{ethClient, privKey}
+			},
+			false},
 	}
 
 	for _, tc := range testCases {
@@ -119,7 +117,6 @@ func (s *IntegrationTestSuite) TestDeployContract() {
 		})
 	}
 }
-
 
 // TODO debug this test
 /*

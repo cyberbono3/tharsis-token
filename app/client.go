@@ -4,26 +4,24 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"errors"
-	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/miguelmota/go-ethereum-hdwallet"
 
 	"github.com/tharsis/token/erc20"
 )
 
-const(
+const (
 	gasLimit = 10000000
 	gasPrice = 100
-	value = 300
+	value    = 300
 
-	rpcEndpoint = "http://0.0.0.0:8545"
-	ContractAddr = "0xd3C2901CE8AfF95176C7812DA97235238D419D0F"
-	Mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
+	rpcEndpoint  = "http://0.0.0.0:8545"
+	ContractAddr = "0x332534B6704432bD43B61cdab476a5fe8F942963"
+	Mnemonic     = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
 )
 
 type Client struct {
@@ -50,66 +48,39 @@ func NewClient(mnemonic string) (*Client, error) {
 // setupTransOpts yields an auth object that holds transaction options
 func (c *Client) setupTransOpts() (*bind.TransactOpts, error) {
 	publicKeyECDSA, ok := c.privateKey.Public().(*ecdsa.PublicKey)
-    if !ok {
+	if !ok {
 		return nil, errors.New("error casting public key to ECDSA")
-    }
+	}
 
-    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-    nonce, err := c.ethClient.PendingNonceAt(context.Background(), fromAddress)
-    if err != nil {
-        return nil, err
-    }
+	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	nonce, err := c.ethClient.PendingNonceAt(context.Background(), fromAddress)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO think to uncomment it
 	/*
-    gasPrice, err := client.SuggestGasPrice(context.Background())
-    if err != nil {
-        log.Fatal(err)
-    }
-	*/ 
+	   gasPrice, err := client.SuggestGasPrice(context.Background())
+	   if err != nil {
+	       log.Fatal(err)
+	   }
+	*/
 
-    auth := bind.NewKeyedTransactor(c.privateKey)
-    auth.Nonce = big.NewInt(int64(nonce))
-    auth.Value = big.NewInt(300)    
-    auth.GasLimit = uint64(gasLimit)
-    auth.GasPrice = big.NewInt(gasPrice)
+	auth := bind.NewKeyedTransactor(c.privateKey)
+	auth.Nonce = big.NewInt(int64(nonce))
+	auth.Value = big.NewInt(300)
+	auth.GasLimit = uint64(gasLimit)
+	auth.GasPrice = big.NewInt(gasPrice)
 
 	return auth, nil
 }
 
-// DeployContract deploys ERC-20 contract using privateKey and ethClient that are stored on Client.
-func (c *Client) DeployContract() error {
-	if c.privateKey == nil {
-		return errors.New("privateKey is nil")
-	}
-
-	if c.ethClient == nil {
-		return errors.New("ethClient is nil")
-	}
-
-    auth, err := c.setupTransOpts()
-	if err != nil {
-		return err
-	}
-
-	// address, tx, instance, err := token.DeployToken(auth, client)
-    addr, tx, _, err := erc20.DeployErc20(auth, c.ethClient)
-    if err != nil {
-        return fmt.Errorf("DeployToken err: %q", err)
-    }
-
-	fmt.Println("contract has been successfully deployed at: ", addr.Hex())
-    fmt.Println("tx hex", tx.Hash().Hex()) 
-
-	return nil
-}
-
-// GetContractInstance yields an contract instance from contract hex string. 
-func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error)   {
+// GetContractInstance yields an contract instance from contract hex string.
+func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error) {
 	address := common.HexToAddress(contractHexStr)
 	instance, err := erc20.NewErc20(address, c.ethClient)
 	if err != nil {
-  		return nil, err
+		return nil, err
 	}
 
 	return instance, nil
@@ -126,72 +97,14 @@ func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 	return bal, nil
 }
 
-
-// TODO fix it - this is incorrect implemntation, see https://goethereumbook.org/transfer-tokens/ for more details
-func (c *Client) TransferTokens(to string, tokens *big.Int) error {
-   // get contract instance 
-    auth, err := c.setupTransOpts()
-	if err != nil {
-		return err
-	}
-
-	instance, err := c.GetContractInstance(ContractAddr)
-	if err != nil {
-		return err
-	}
-
-	
-	tx, err := instance.Transfer(auth, common.HexToAddress(to), tokens)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("transfer tx sent: %s", tx.Hash().Hex()) // tx sent: 0x8d490e535678e9a24360e955d75b27ad307bdfb97a1dca51d0f3035dcee3e870
-
-	return nil
-}
-
 // deriveOwnerAddressHexStr derives owner's address from private key that is stored on Client
 func (c *Client) deriveOwnerAddressHexStr() (string, error) {
-    publicKey := c.privateKey.Public()
-    publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-    if !ok {
-        return "", errors.New("error casting public key to ECDSA")
-    }
-
-    fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	return fromAddress.Hex(),nil
-}
-
-// initEthClient sets up ethClient based on rpcEndpoint provided
-func initEthClient(rpcEndpoint string) (*ethclient.Client, error) {
-	client, err := ethclient.Dial(rpcEndpoint)
-	if err != nil {
-		return nil, err
+	publicKey := c.privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		return "", errors.New("error casting public key to ECDSA")
 	}
 
-	return client, nil
-}
-
-
-
-// privKeyFromMnemonic derives a private key from mnemonic phrase
-func privKeyFromMnemonic(mnemonic string) (*ecdsa.PrivateKey, error) {
-	wallet, err := hdwallet.NewFromMnemonic(mnemonic)
-	if err != nil {
-		return nil,err
-	}
-
-	path := hdwallet.MustParseDerivationPath("m/44'/60'/0'/0/0")
-	account, err := wallet.Derive(path, false) // account.Address.Hex(),
-	if err != nil {
-		return nil, err
-	}
-
-	privateKey, err := wallet.PrivateKey(account)
-	if err != nil {
-		return nil, err
-	}
-
-	return privateKey, nil
+	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	return fromAddress.Hex(), nil
 }
