@@ -61,13 +61,13 @@ token deploy sight cotton inmate increase build victory emerge flee rhythm begin
 ```
 3. See deployment confirmation that look like that:
 ```
-contract has been successfully deployed at:  0x08F469C71BB15374Dcf5201Df3983D41D418f57a
-tx hex 0xf91011e262de34b96761cb115638939de7e8c2180ed780e99e9b8ffb522d231f
+contract has been successfully deployed at:  "0x332534B6704432bD43B61cdab476a5fe8F942963"
+tx hex 0x4b4579541296756f3ae9f1e6eb9a2dc0f7b3760151db1cf559353f2f1e2ba0fc
 deploy called
 ```
 4. Hardcode contract address and mnemonic in `app/client.go` 
 ```
-ContractAddr = "0x08F469C71BB15374Dcf5201Df3983D41D418f57a"
+ContractAddr = "0x332534B6704432bD43B61cdab476a5fe8F942963"
 Mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
 ```
 This is some UX issue for a client. You can fix it by implementing CLI commands or using config file. I keep it out of scope of this task due to lack of time.
@@ -76,7 +76,7 @@ This is some UX issue for a client. You can fix it by implementing CLI commands 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Query token balance of a contract or any account address by running `token query <contract_address> <account_address>`
 ```
-token query 0x08F469C71BB15374Dcf5201Df3983D41D418f57a
+token query 0x332534B6704432bD43B61cdab476a5fe8F942963
 ```
 3. It should output a total supply of contract,
 4. Unfortunately, it yields an error: 
@@ -113,6 +113,7 @@ token trasfer <to_address> <tokens>
 
 ```
 ### TODO
+* Resolve an error 
 * Address and test corner cases in transfer scenario :
 	1. No value to pay for a gas to run `transfer tokens transaction`
 	2. Transaction execution fails if `to` is 0 address.

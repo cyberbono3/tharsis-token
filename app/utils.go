@@ -10,10 +10,16 @@ import (
 	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 )
 
-func bigIntTokensFromStr(str string) (*big.Int, error) {
+func bigIntFromStr(str string, toWei bool) (*big.Int, error) {
 	// convert string to *big.Int
 	n := new(big.Int)
-	n, ok := n.SetString(str+"000000000000000000", 10) //18 zeroes
+	var ok bool
+	if toWei {
+		n, ok = n.SetString(str+"000000000000000000", 10) //str token in wei
+	} else {
+		n, ok = n.SetString(str, 10)
+	}
+
 	if !ok {
 		return nil, errors.New("unable convert string to *big.Int")
 	}
@@ -21,7 +27,7 @@ func bigIntTokensFromStr(str string) (*big.Int, error) {
 	return n, nil
 }
 
-func AddressFromPrivKey(privKey *ecdsa.PrivateKey) (string, error) {
+func addressFromPrivKey(privKey *ecdsa.PrivateKey) (string, error) {
 
 	publicKey := privKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
@@ -60,6 +66,7 @@ func privKeyFromMnemonic(mnemonic string) (*ecdsa.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
+
 
 	return privateKey, nil
 }

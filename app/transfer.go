@@ -61,15 +61,15 @@ func (c *Client) TransferTokens(to string, tokens string) error {
 	toAddress := common.HexToAddress(to)
 	tokenAddress := common.HexToAddress(ContractAddr)
 
-	transferFnSignature := []byte("transfer(address,uint256)")
-	hash := crypto.Keccak256Hash(transferFnSignature) //sha3.NewKeccak256() is deprecated
-	methodID := hash.Sum(nil)[:4]                     // TODO resolve issue hash.Sum underfined, tried Keccak256 method above
-	fmt.Println(hexutil.Encode(methodID))             // 0xa9059cbb
-
+	//transferFnSignature := []byte("transfer(address,uint256)")
+	//hash := crypto.Keccak256Hash(transferFnSignature) //sha3.NewKeccak256() is deprecated
+	// TODO resolve issue hash.Sum undefined, tried Keccak256 method above
+	//methodID := hash.Sum(nil)[:4]
+	//fmt.Println(hexutil.Encode(methodID))             // 0xa9059cbb
 	paddedAddress := common.LeftPadBytes(toAddress.Bytes(), 32)
-	fmt.Println(hexutil.Encode(paddedAddress)) 
+	fmt.Println(hexutil.Encode(paddedAddress))
 
-	bigIntTokens, err := bigIntTokensFromStr(tokens)
+	bigIntTokens, err := bigIntFromStr(tokens, true)
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func (c *Client) TransferTokens(to string, tokens string) error {
 	fmt.Println(hexutil.Encode(paddedAmount))
 
 	var data []byte
-	data = append(data, methodID...)
+	//data = append(data, methodID...)
 	data = append(data, paddedAddress...)
 	data = append(data, paddedAmount...)
 

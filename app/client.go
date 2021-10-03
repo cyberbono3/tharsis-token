@@ -96,15 +96,3 @@ func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
 
 	return bal, nil
 }
-
-// deriveOwnerAddressHexStr derives owner's address from private key that is stored on Client
-func (c *Client) deriveOwnerAddressHexStr() (string, error) {
-	publicKey := c.privateKey.Public()
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-	if !ok {
-		return "", errors.New("error casting public key to ECDSA")
-	}
-
-	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	return fromAddress.Hex(), nil
-}
