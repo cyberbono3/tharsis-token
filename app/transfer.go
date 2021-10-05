@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"crypto/ecdsa"
+//	"crypto/ecdsa"
 	"fmt"
 	"log"
 	"math/big"
@@ -11,26 +11,23 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
+	//"github.com/ethereum/go-ethereum/crypto"
 )
-
 /*
 ai@ai-ThinkPad-T450:~/go/src/github.com/tharsis/ethermint$ ethermintd keys add robert --keyring-backend test
 
 - name: robert
   type: local
-  address: ethm1cwzy7perlc77p8y0hns5hw22u4ayt4ejc0efv0
-  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"Aq1z0Idxr3nQRS9VAZDsaW+KDeNBwwyfztuyMx9LmgUs"}'
+  address: ethm1y0mx0vl4hsufxgzmdf8dm5w3593f4eqzmm6nfz
+  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"Az9bCjGcuDSwxQBROUebG//sjjQz1gBKkNL6UyDMuK3K"}'
   mnemonic: ""
 
 
 **Important** write this mnemonic phrase in a safe place.
 It is the only way to recover your account if you ever forget your password.
 
-quiz drill venue extend shuffle conduct toward zero seek surge mystery fall fun assist quiz wheat rude abuse weekend base enemy deposit tennis tone
-
+drastic early glass silver head satoshi hammer dawn source rubber basic balcony civil dentist oxygen spice solid script know dial tired outside conduct siege
 */
-
 // TODO fix it - this is incorrect implemntation, see https://goethereumbook.org/transfer-tokens/ for more details
 //1.  add new key to ethermint
 //2.  convert it's mnemonic to the Ethereum address - this is "to"
@@ -39,14 +36,11 @@ quiz drill venue extend shuffle conduct toward zero seek surge mystery fall fun 
 
 func (c *Client) TransferTokens(to string, tokens string) error {
 	// get contract instance
-
-	publicKey := c.privateKey.Public()
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-	if !ok {
-		log.Fatal("error casting public key to ECDSA")
+	fromAddress, err := addressFromPrivKey(c.privateKey)
+	if err != nil {
+		return err
 	}
 
-	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := c.ethClient.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
 		log.Fatal(err)
