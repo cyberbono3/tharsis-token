@@ -40,7 +40,7 @@ func Test_runDeployCmd(t *testing.T) {
 			true,
 			},
 		*/
-		
+
 	}
 
 	for _, tc := range tt {

@@ -13,6 +13,7 @@ func (c *Client) Mint(address string, tokens string) error {
 		return err
 	}
 
+	// works
 	// load contract
 	instance, err := c.GetContractInstance(ContractAddr)
 	if err != nil {
@@ -24,12 +25,12 @@ func (c *Client) Mint(address string, tokens string) error {
 		return err
 	}
 
-	tx, err := instance.Mint(auth, common.HexToAddress(address), amount)
+	_, err = instance.Mint(auth, common.HexToAddress(address), amount)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("%s tokens for account address %s has been minted", tokens, tx.Hash().Hex())
+	fmt.Printf("%s tokens for account address %s have been minted \n", tokens, address)
 
 	return nil
 }

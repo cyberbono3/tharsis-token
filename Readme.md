@@ -122,34 +122,33 @@ ContractAddr = "0x699115980439687bEfC301549599edF5e6A28716"
 ```
 
 ### Mint ERC-20 Tokens
+1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
+
 
 
 ### Query ERC-20 contract balance 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
-2. Query token balance of a contract or any account address by running `token query <contract_address> <account_address>`
+2. Query token balance of a contract or any account address by running `token query <account_address>`
 ```
-token query 0x699115980439687bEfC301549599edF5e6A28716
+token query 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7
 ```
 3. It should output a total supply of contract,
-4. Unfortunately, it yields an error: 
+4. Unfortunately, it raises an error: 
 ```
-Error: TotalSupply1 err: "no contract code at given address"
+Error: no contract code at given address
 ```
 5. The error arises here:
 ```
-totalSupply, err := instance.TotalSupply1(&bind.CallOpts{})
+Error: instance.BalanceOf: "no contract code at given address"
+```
+6. Namely, `instance.BalanceOf method yields an error:
+```
+bal, err := instance.BalanceOf(&bind.CallOpts{}, common.HexToAddress(address))
 if err != nil {
-	return fmt.Errorf("TotalSupply1 err: %q", err)
+	return fmt.Errorf("instance.BalanceOf: %q", err)
 }
 ```
-6. Namely, `contract.Call` method yields an error in [token.go](https://github.com/cyberbono3/tharsis-token/erc20/Token.go). need more time to debug it.
-```
-func (_Erc20 *Erc20Caller) TotalSupply1(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Erc20.contract.Call(opts, &out, "_totalSupply")
-}
-```
-TODO scenario add an account in `ethermint` and run `token query <contract_address> <account_address>`
+
 
 ### Transfer tokens from owner to an arbitary account (WORK IN PROGRESS)
 Solidity function

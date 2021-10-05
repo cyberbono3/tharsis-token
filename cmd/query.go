@@ -15,22 +15,19 @@
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/spf13/cobra"
 	"github.com/tharsis/token/app"
 )
 
 // queryCmd represents the query command
 var queryCmd = &cobra.Command{
-	Use:   "query <contract_address> <account_address> ",
+	Use:   "query <account_address> ",
 	Short: "This command queries a token balance of either contract or account address",
 	Long: `Firstly, it sets up a contract instance using a contract address provided. If it fails, it yield an error.
 	 Otherwise, the command checks the number of arguments. If it has one argument, the command queries contract token supply. 
 	 If it has 2 arguments, the command queries the balance of account address.`,
 	RunE: runQueryCmd,
-	Args: cobra.RangeArgs(1, 2),
+	Args: cobra.ExactArgs(1),
 }
 
 func runQueryCmd(cmd *cobra.Command, args []string) error {
@@ -39,33 +36,26 @@ func runQueryCmd(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	contractHexStr := args[0]
-	client := clientCtx.Client
-	instance, err := client.GetContractInstance(contractHexStr)
-	if err != nil {
-		return fmt.Errorf("GetContractInstance err: %q", err)
+	addr := args[0]
+	if err := clientCtx.Client.Query(addr); err != nil {
+		return err
 	}
+
+	return nil
 
 	// if len(args) == 1 we display total supply of a contact
-	if len(args) == 1 {
-		totalSupply, err := instance.TotalSupply1(&bind.CallOpts{})
-		if err != nil {
-			return fmt.Errorf("TotalSupply1 err: %q", err)
+	/*
+		if len(args) == 1 {
+			totalSupply, err := instance.TotalSupply1(&bind.CallOpts{})
+			if err != nil {
+				return fmt.Errorf("TotalSupply1 err: %q", err)
+			}
+
+			fmt.Println("totalSupply of a contract", totalSupply)
+			return nil
 		}
+	*/
 
-		fmt.Println("totalSupply of a contract", totalSupply)
-		return nil
-	}
-
-	addrStr := args[1]
-	// if len(args) == 2 , we display a total supply of an address args[1]
-	bal, err := app.DisplayTokenBalance(instance, addrStr)
-	if err != nil {
-		return fmt.Errorf("DisplayTokenBalance err: %q", err)
-	}
-
-	fmt.Printf("Token balance of %s is: %d", args[1], bal)
-	return nil
 }
 
 func init() {
