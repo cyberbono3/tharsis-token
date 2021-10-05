@@ -20,16 +20,64 @@ This application contains the following packages:
 2. Run ethermint Node on a background by running `./init.sh`. It will start a node and set up create a new key `mykey` and fund it with `aphoton` tokens
 3. Add a new key `andrei` and save `mnemonic` words.
 ```
-ethermintd keys add andrei 
+ethermintd keys add andrei --keyring-backend test
 ```
-`mnemonic` words are: `sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness`
+Output:
+```
+- name: andrei
+  type: local
+  address: ethm1mhkk43lq5y7mtmnssy9lqlj2sav9ncd8tpma3a
+  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"A7Hpzr+EEz8K1Qtg/Wo5Pb1Je5uDZvBGBL9RLng1owTO"}'
+  mnemonic: ""
 
 
-4. We have to fund `andrei` key with some tokens to pay for future gas costs. Transfer some tokens from `mykey` to `andrei` and confirm the transaction.
+**Important** write this mnemonic phrase in a safe place.
+It is the only way to recover your account if you ever forget your password.
+
+language fit sniff present wonder fish absent direct sheriff innocent thought educate bitter current design mother sunset name pelican rate clip eternal medal popular
+
 ```
-ethermintd tx bank send ethm18a9c2rz2faq5f6s5zlmancvalcpvc7qrgar48y ethm1egn3vmrezgenc406ca6dw96fgr6t27swae8fc6  1000000000aphoton --fees 20aphoton
+
+4. View `mykey` address 
 ```
-where `ethm18a9c2rz2faq5f6s5zlmancvalcpvc7qrgar48y` is `mykey` address, `ethm1egn3vmrezgenc406ca6dw96fgr6t27swae8fc6` is `andrei` address. 
+ethermintd keys list
+```
+Output:
+```
+- name: andrei  type: local
+  address: ethm1mhkk43lq5y7mtmnssy9lqlj2sav9ncd8tpma3a
+  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"A7Hpzr+EEz8K1Qtg/Wo5Pb1Je5uDZvBGBL9RLng1owTO"}'
+  mnemonic: ""
+- name: mykey
+  type: local
+  address: ethm157h9798qgrxfxzv6t40dx98lkqty8eqcay9mfs
+  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"AmemhAX8WVP8qjffv0zmc3frUYAEGGKldYTRMUv1OfEI"}'
+  mnemonic: ""
+```
+
+5. We have to fund `andrei` key with some tokens to pay for future gas costs. Transfer some tokens from `mykey` to `andrei` and confirm the transaction.
+```
+ethermintd tx bank send ethm157h9798qgrxfxzv6t40dx98lkqty8eqcay9mfs ethm1mhkk43lq5y7mtmnssy9lqlj2sav9ncd8tpma3a  1000000000aphoton --fees 20aphoton
+```
+where `ethm157h9798qgrxfxzv6t40dx98lkqty8eqcay9mfs` is `mykey` address, `ethm1mhkk43lq5y7mtmnssy9lqlj2sav9ncd8tpma3a` is `andrei` address. 
+Output:
+```
+{"body":{"messages":[{"@type":"/cosmos.bank.v1beta1.MsgSend","from_address":"ethm157h9798qgrxfxzv6t40dx98lkqty8eqcay9mfs","to_address":"ethm1mhkk43lq5y7mtmnssy9lqlj2sav9ncd8tpma3a","amount":[{"denom":"aphoton","amount":"1000000000"}]}],"memo":"","timeout_height":"0","extension_options":[],"non_critical_extension_options":[]},"auth_info":{"signer_infos":[],"fee":{"amount":[{"denom":"aphoton","amount":"20"}],"gas_limit":"200000","payer":"","granter":""}},"signatures":[]}
+
+confirm transaction before signing and broadcasting [y/N]: Y
+code: 0
+codespace: ""
+data: ""
+gas_used: "0"
+gas_wanted: "0"
+height: "0"
+info: ""
+logs: []
+raw_log: '[]'
+timestamp: ""
+tx: null
+txhash: 3F2F06FA30D7CF7E5F891A8D41198389C426EC80ED8999679F4308DE075CE7F3
+```
 
 ### Program Installion
 
