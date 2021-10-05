@@ -15,49 +15,43 @@
 package cmd
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/tharsis/token/app"
 )
 
-// transferCmd represents the transfer command
-var transferCmd = &cobra.Command{
-	Use:   "transfer <to> <tokens>",
-	Short: "Transfer tokens from owner to receiver",
-	Long:  `Firstly, contract tokens `,
-	RunE:  runTransferCmd,
-	Args:  cobra.ExactArgs(2),
-}
+// ethaddressCmd represents the ethaddress command
+var ethaddressCmd = &cobra.Command{
+	Use:   "ethaddress",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
 
-func runTransferCmd(cmd *cobra.Command, args []string) error {
-	clientCtx, err := app.GetClientContext(cmd)
-	if err != nil {
-		return err
-	}
-
-	to := args[0]
-	tokens := args[1]
-
-	if err = clientCtx.Client.TransferTokens(to, tokens); err != nil {
-		return err
-	}
-
-	fmt.Println("transfer has been executed successfuly")
-
-	return nil
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		mnemonic := strings.Join(args, " ")
+		if err := app.DeriveEthAddressFrom(mnemonic); err != nil {
+			return err
+		}
+		
+		return nil
+	},
+	Args: cobra.ExactArgs(24),
 }
 
 func init() {
-	RootCmd.AddCommand(transferCmd)
+	RootCmd.AddCommand(ethaddressCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// transferCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// ethaddressCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// transferCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// ethaddressCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
