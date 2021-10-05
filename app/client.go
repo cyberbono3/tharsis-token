@@ -21,7 +21,7 @@ const (
 
 	rpcEndpoint  = "http://0.0.0.0:8545"
 	ContractAddr = "0x332534B6704432bD43B61cdab476a5fe8F942963"
-	Mnemonic     = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
+	Mnemonic     = "language fit sniff present wonder fish absent direct sheriff innocent thought educate bitter current design mother sunset name pelican rate clip eternal medal popular"
 )
 
 type Client struct {

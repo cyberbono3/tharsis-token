@@ -103,28 +103,30 @@ abigen --bin=erc20/token.bin --abi=erc20/token.bin --pkg=erc20 --out=erc20/Token
 ### Deploy ERC-20 contract
 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
-2. Deploy Erc-20 [token](https://github.com/cyberbono3/tharsis-token/blob/master/erc20/token.sol) on Ethermint using `token deploy <mnemonic words>` command and saved `mnemonic` words from Ethermint Preparation Step 3. You can read full desciption about `deploy` command [here](https://github.com/cyberbono3/tharsis-token/blob/master/cmd/deploy.go)
+2. Hardcode mnemonic phrase of `andrei` key in `app/client.go` (the better option to use some config in encrypted fashion)
 ```
-token deploy sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness
+Mnemonic = "language fit sniff present wonder fish absent direct sheriff innocent thought educate bitter current design mother sunset name pelican rate clip eternal medal popular"
 ```
-3. See deployment confirmation that look like that:
+3. Deploy Erc-20 [token](https://github.com/cyberbono3/tharsis-token/blob/master/erc20/token.sol) on Ethermint using `token deploy`  command. It will use `andrei` account under the hood to pay for gas costs. You can read full desciption about `deploy` command [here](https://github.com/cyberbono3/tharsis-token/blob/master/cmd/deploy.go)
 ```
-contract has been successfully deployed at:  "0x332534B6704432bD43B61cdab476a5fe8F942963"
-tx hex 0x4b4579541296756f3ae9f1e6eb9a2dc0f7b3760151db1cf559353f2f1e2ba0fc
+token deploy
+```
+4. See deployment confirmation that look like that:
+```
+contract has been successfully deployed at:  0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025
+tx hex 0x9ebf55cb4ce25a1671960f31ee85482156402dea86eff03f4e6e565474a81bae
 deploy called
 ```
-4. Hardcode contract address and mnemonic in `app/client.go` 
+5. Hardcode contract address and mnemonic in `app/client.go` (future use of config for that)
 ```
-ContractAddr = "0x332534B6704432bD43B61cdab476a5fe8F942963"
-Mnemonic = "sight cotton inmate increase build victory emerge flee rhythm begin physical copy elite drill trash immense doctor doll bundle person whale discover they witness"
+ContractAddr = "0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025"
 ```
-This is some UX issue for a client. You can fix it by implementing CLI commands or using config file. I keep it out of scope of this task due to lack of time.
 
 ### Query ERC-20 contract balance 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Query token balance of a contract or any account address by running `token query <contract_address> <account_address>`
 ```
-token query 0x332534B6704432bD43B61cdab476a5fe8F942963
+token query 0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025
 ```
 3. It should output a total supply of contract,
 4. Unfortunately, it yields an error: 

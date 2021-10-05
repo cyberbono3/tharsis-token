@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/tharsis/token/app"
@@ -24,22 +23,21 @@ import (
 
 // deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
-	Use:   "deploy <mnemonic words>",
+	Use:   "deploy",
 	Short: "deploy deploys a contract at Ethermint node",
-	Long: `deploy uses mnemonic words to derive a private key. This private key is used to yield a public key and Ethereum address. 
+	Long: `deploy uses hardcoded mnemonic phrase to derive a private key. This private key is used to yield a public key and Ethereum address. 
 	This Ethereum account acts as a fromAccount and pays gas costs to deploy a contract.`,
 	RunE: runDeployCmd,
-	Args: cobra.ExactArgs(24),
+	Args: cobra.NoArgs,
 }
 
-func runDeployCmd(_ *cobra.Command, args []string) error {
-	mnemonic := strings.Join(args, " ")
-	client, err := app.NewClient(mnemonic)
+func runDeployCmd(cmd *cobra.Command, _ []string) error {
+	clientCtx, err := app.GetClientContext(cmd)
 	if err != nil {
 		return err
 	}
 
-	if err = client.DeployContract(); err != nil {
+	if err = clientCtx.Client.DeployContract(); err != nil {
 		return err
 	}
 
