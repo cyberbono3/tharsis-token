@@ -41,7 +41,7 @@ func runDeployCmd(cmd *cobra.Command, _ []string) error {
 		return err
 	}
 
-	fmt.Println("deploy called")
+	fmt.Println("\n deploy called")
 	return nil
 }
 

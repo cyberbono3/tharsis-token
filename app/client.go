@@ -3,12 +3,10 @@ package app
 import (
 	"context"
 	"crypto/ecdsa"
-	"errors"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/tharsis/token/erc20"
@@ -46,16 +44,15 @@ func NewClient(mnemonic string) (*Client, error) {
 }
 
 // setupTransOpts yields an auth object that holds transaction options
-func (c *Client) setupTransOpts() (*bind.TransactOpts, error) {
-	publicKeyECDSA, ok := c.privateKey.Public().(*ecdsa.PublicKey)
-	if !ok {
-		return nil, errors.New("error casting public key to ECDSA")
+func (c *Client) setupTransOpts() (*bind.TransactOpts, string, error) {
+	fromAddress, err := addressFromPrivKey(c.privateKey)
+	if err != nil {
+		return nil,"", err
 	}
 
-	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := c.ethClient.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
-		return nil, err
+		return nil,"", err
 	}
 
 	// TODO think to uncomment it
@@ -72,7 +69,7 @@ func (c *Client) setupTransOpts() (*bind.TransactOpts, error) {
 	auth.GasLimit = uint64(gasLimit)
 	auth.GasPrice = big.NewInt(gasPrice)
 
-	return auth, nil
+	return auth, fromAddress.Hex(), nil
 }
 
 // GetContractInstance yields an contract instance from contract hex string.

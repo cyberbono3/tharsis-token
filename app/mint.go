@@ -8,7 +8,7 @@ import (
 
 func (c *Client) Mint(address string, tokens string) error {
 	// set transaction opts
-	auth, err := c.setupTransOpts()
+	auth, _, err := c.setupTransOpts()
 	if err != nil {
 		return err
 	}

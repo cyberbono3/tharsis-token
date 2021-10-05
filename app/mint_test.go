@@ -5,7 +5,6 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,19 +16,18 @@ func TestMint(t *testing.T){
 	client, err := NewClient(Mnemonic)
 	require.NoError(t, err)
 
-	ownerAddrStr, err := addressFromPrivKey(client.privateKey)
+	ownerAddr, err := addressFromPrivKey(client.privateKey)
 	require.NoError(t, err)
 
 	instance, err := client.GetContractInstance(ContractAddr)
 	require.NoError(t, err)
 
-	ownerAddr := common.HexToAddress(ownerAddrStr)
 	// balBefore 0 tokens
 	balBefore, err := instance.BalanceOf(&bind.CallOpts{}, ownerAddr)
 	require.NoError(t, err)
 
 	// mint 1000 tokens
-	err = client.Mint(ownerAddrStr, amount)
+	err = client.Mint(ownerAddr.Hex(), amount)
 	require.NoError(t, err)
 
 	// balAfter 1000 tokens

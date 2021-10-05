@@ -17,19 +17,18 @@ func (c *Client) DeployContract() error {
 		return errors.New("ethClient is nil")
 	}
 
-	auth, err := c.setupTransOpts()
+	auth,fromAddressStr, err := c.setupTransOpts()
 	if err != nil {
 		return err
 	}
 
 	// address, tx, instance, err := token.DeployToken(auth, client)
-	addr, tx, _, err := erc20.DeployErc20(auth, c.ethClient)
+	addr, _, _, err := erc20.DeployErc20(auth, c.ethClient)
 	if err != nil {
 		return fmt.Errorf("DeployToken err: %q", err)
 	}
 
-	fmt.Println("contract has been successfully deployed at: ", addr.Hex())
-	fmt.Println("tx hex", tx.Hash().Hex())
+	fmt.Printf("contract from %s has been successfully deployed at: %s", fromAddressStr, addr.Hex())
 
 	return nil
 }

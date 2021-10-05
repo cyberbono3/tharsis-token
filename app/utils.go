@@ -6,6 +6,7 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 )
@@ -27,16 +28,15 @@ func bigIntFromStr(str string, toWei bool) (*big.Int, error) {
 	return n, nil
 }
 
-func addressFromPrivKey(privKey *ecdsa.PrivateKey) (string, error) {
+func addressFromPrivKey(privKey *ecdsa.PrivateKey) (common.Address, error) {
 
-	publicKey := privKey.Public()
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	publicKeyECDSA, ok := privKey.Public().(*ecdsa.PublicKey)
 	if !ok {
-		return "", errors.New("error casting public key to ECDSA")
+		return common.Address{}, errors.New("error casting public key to ECDSA")
 	}
 
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	return fromAddress.Hex(), nil
+	return fromAddress, nil
 }
 
 // initEthClient sets up ethClient based on rpcEndpoint provided

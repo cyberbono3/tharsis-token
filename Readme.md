@@ -113,20 +113,22 @@ token deploy
 ```
 4. See deployment confirmation that look like that:
 ```
-contract has been successfully deployed at:  0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025
-tx hex 0x9ebf55cb4ce25a1671960f31ee85482156402dea86eff03f4e6e565474a81bae
+contract from 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 has been successfully deployed at: 0x699115980439687bEfC301549599edF5e6A28716
 deploy called
 ```
-5. Hardcode contract address and mnemonic in `app/client.go` (future use of config for that)
+5. Hardcode contract address in `app/client.go` (future use of config for that)
 ```
-ContractAddr = "0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025"
+ContractAddr = "0x699115980439687bEfC301549599edF5e6A28716"
 ```
+
+### Mint ERC-20 Tokens
+
 
 ### Query ERC-20 contract balance 
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Query token balance of a contract or any account address by running `token query <contract_address> <account_address>`
 ```
-token query 0xB0c94B6aE8eB565E3fC63889b1BDBCF73D8C7025
+token query 0x699115980439687bEfC301549599edF5e6A28716
 ```
 3. It should output a total supply of contract,
 4. Unfortunately, it yields an error: 
