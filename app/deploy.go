@@ -17,7 +17,7 @@ func (c *Client) DeployContract() error {
 		return errors.New("ethClient is nil")
 	}
 
-	auth,fromAddressStr, err := c.setupTransOpts()
+	auth, fromAddressStr, err := c.setupTransOpts()
 	if err != nil {
 		return err
 	}

@@ -47,12 +47,12 @@ func NewClient(mnemonic string) (*Client, error) {
 func (c *Client) setupTransOpts() (*bind.TransactOpts, string, error) {
 	fromAddress, err := addressFromPrivKey(c.privateKey)
 	if err != nil {
-		return nil,"", err
+		return nil, "", err
 	}
 
 	nonce, err := c.ethClient.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
-		return nil,"", err
+		return nil, "", err
 	}
 
 	// TODO think to uncomment it

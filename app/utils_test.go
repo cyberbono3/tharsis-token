@@ -31,7 +31,7 @@ func TestInitEthClient(t *testing.T) {
 	}
 }
 
-func TestAddressFromMnemonic(t *testing.T){
+func TestAddressFromMnemonic(t *testing.T) {
 	mnemonic := "sound practice disease erupt basket pumpkin truck file gorilla behave find exchange napkin boy congress address city net prosper crop chair marine chase seven"
 
 	privKey, err := privKeyFromMnemonic(mnemonic)

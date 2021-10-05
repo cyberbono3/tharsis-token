@@ -5,8 +5,8 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 )
@@ -66,7 +66,6 @@ func privKeyFromMnemonic(mnemonic string) (*ecdsa.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
-
 
 	return privateKey, nil
 }

@@ -22,13 +22,15 @@ import (
 )
 
 // deployCmd represents the deploy command
-var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "deploy deploys a contract at Ethermint node",
-	Long: `deploy uses hardcoded mnemonic phrase to derive a private key. This private key is used to yield a public key and Ethereum address. 
-	This Ethereum account acts as a fromAccount and pays gas costs to deploy a contract.`,
-	RunE: runDeployCmd,
-	Args: cobra.NoArgs,
+func deployContractCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:   "deploy",
+		Short: "deploy deploys a contract at Ethermint node",
+		Long: `deploy uses hardcoded mnemonic phrase to derive a private key. This private key is used to yield a public key and Ethereum address. 
+		This Ethereum account acts as a fromAccount and pays gas costs to deploy a contract.`,
+		RunE: runDeployCmd,
+		Args: cobra.NoArgs,
+	}
 }
 
 func runDeployCmd(cmd *cobra.Command, _ []string) error {
@@ -46,7 +48,7 @@ func runDeployCmd(cmd *cobra.Command, _ []string) error {
 }
 
 func init() {
-	RootCmd.AddCommand(deployCmd)
+	RootCmd.AddCommand(deployContractCommand())
 
 	// Here you will define your flags and configuration settings.
 

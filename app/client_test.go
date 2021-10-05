@@ -32,8 +32,6 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
-
-
 type IntegrationTestSuite struct {
 	suite.Suite
 
@@ -95,11 +93,10 @@ func (s *IntegrationTestSuite) TestDeployContract() {
 	}
 }
 
-
 /* TODO fix
 func (s *IntegrationTestSuite) TestGetContractInstance(){
 
-	var string contractHexStr 
+	var string contractHexStr
 
 	testCases := []struct {
 		name        string
@@ -129,7 +126,6 @@ func (s *IntegrationTestSuite) TestGetContractInstance(){
 	}
 }
 */
-
 
 // TODO resolve error Error: TotalSupply1 err: "no contract code at given address" and write the test
 /*
