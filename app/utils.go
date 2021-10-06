@@ -11,16 +11,14 @@ import (
 	hdwallet "github.com/miguelmota/go-ethereum-hdwallet"
 )
 
-func bigIntFromStr(str string, toWei bool) (*big.Int, error) {
+func bigIntFromStr(str string) (*big.Int, error) {
 	// convert string to *big.Int
-	n := new(big.Int)
-	var ok bool
-	if toWei {
-		n, ok = n.SetString(str+"000000000000000000", 10) //str token in wei
-	} else {
-		n, ok = n.SetString(str, 10)
+	if str == "" {
+		return nil, errors.New("unable to get big.Int from empty string")
 	}
+	n := new(big.Int)
 
+	n, ok := n.SetString(str, 10)  // str tokens in wei
 	if !ok {
 		return nil, errors.New("unable convert string to *big.Int")
 	}

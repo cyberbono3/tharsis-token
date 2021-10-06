@@ -14,7 +14,7 @@ import (
 
 const (
 	gasLimit = 10000000
-	gasPrice = 100
+	gasPrice = 3
 	value    = 300
 
 	rpcEndpoint  = "http://0.0.0.0:8545"
@@ -83,13 +83,3 @@ func (c *Client) GetContractInstance(contractHexStr string) (*erc20.Erc20, error
 	return instance, nil
 }
 
-// TODO test
-// DisplayTokenBalance invokes BalanceOf solidity function on contract instance and  address provided. it outputs *big.Int in success case and error otherwise.
-func DisplayTokenBalance(instance *erc20.Erc20, addr string) (*big.Int, error) {
-	bal, err := instance.BalanceOf(&bind.CallOpts{}, common.HexToAddress(addr))
-	if err != nil {
-		return nil, err
-	}
-
-	return bal, nil
-}

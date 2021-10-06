@@ -127,12 +127,7 @@ func (s *IntegrationTestSuite) TestGetContractInstance(){
 }
 */
 
-// TODO resolve error Error: TotalSupply1 err: "no contract code at given address" and write the test
-/*
-func (s *IntegrationTestSuite)  TestDisplayTokenBalance() {
 
-}
-*/
 
 // TODO
 func TestIntegrationTestSuite(t *testing.T) {

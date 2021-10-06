@@ -123,59 +123,97 @@ ContractAddr = "0x699115980439687bEfC301549599edF5e6A28716"
 
 ### Mint ERC-20 Tokens
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
+2. CLI command `token mint <ethereum_address> <amount`
+3. Input:
+```
+token mint 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 1000
+```
+4. Output
+```
+1000 tokens for account address 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 have been minted
+```
 
+### Derive Ethereum address from mnemonic phrase
+1. CLI Command Usage `token ethaddress <mnemonic words>`
+2. Input:
+```
+token ethaddress token ethaddress drastic early glass silver head satoshi hammer dawn source rubber basic balcony civil dentist oxygen spice solid script know dial tired outside conduct siege
+```
+2. Output:
+```
+Ethereum address is: 0x23F667B3f5Bc3893205B6A4edDd1D1A1629aE402 
+```
 
-
-### Query ERC-20 contract balance 
+### Query ERC-20 contract balance (razobratjsja s balansom)
 1. Checkout [Tharsis Token repo](https://github.com/cyberbono3/tharsis-token)
 2. Query token balance of a contract or any account address by running `token query <account_address>`
 ```
 token query 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7
 ```
-3. It should output a total supply of contract,
-4. Unfortunately, it raises an error: 
+3. It outputs token balance:
 ```
-Error: no contract code at given address
-```
-5. The error arises here:
-```
-Error: instance.BalanceOf: "no contract code at given address"
-```
-6. Namely, `instance.BalanceOf method yields an error:
-```
-bal, err := instance.BalanceOf(&bind.CallOpts{}, common.HexToAddress(address))
-if err != nil {
-	return fmt.Errorf("instance.BalanceOf: %q", err)
-}
+Token balance of 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 is: 3847775300 
 ```
 
+### Transfer tokens from owner to an arbitary account
 
-### Transfer tokens from owner to an arbitary account (WORK IN PROGRESS)
 Solidity function
 ```
 function transfer(address to, uint tokens) public returns (bool success) {
 ```
-1. Check owner's token balance using `balanceOf`. 
-2. Mint tokens on owner acccount\if owner's token balance is zero.
-3. Use `ethermitd keys add to` to add destination account and derive it's ethereum address from mnemonic phrase.
-4. Follow the [guide](https://goethereumbook.org/transfer-tokens/) to transfer `tokens` from `owner` to `to` address.
+
+#### Preparation 
+1. Add new `robert` key into ethermint
 ```
-token trasfer <to_address> <tokens>
+ai@ai-ThinkPad-T450:~/go/src/github.com/tharsis/ethermint$ ethermintd keys add robert --keyring-backend test
+
+- name: robert
+  type: local
+  address: ethm1y0mx0vl4hsufxgzmdf8dm5w3593f4eqzmm6nfz
+  pubkey: '{"@type":"/ethermint.crypto.v1.ethsecp256k1.PubKey","key":"Az9bCjGcuDSwxQBROUebG//sjjQz1gBKkNL6UyDMuK3K"}'
+  mnemonic: ""
+
+
+**Important** write this mnemonic phrase in a safe place.
+It is the only way to recover your account if you ever forget your password.
+
+drastic early glass silver head satoshi hammer dawn source rubber basic balcony civil dentist oxygen spice solid script know dial tired outside conduct siege
 
 ```
-### TODO
-* Resolve an error 
-* Address and test corner cases in transfer scenario :
-	1. No value to pay for a gas to run `transfer tokens transaction`
-	2. Transaction execution fails if `to` is 0 address.
-	3. Transaction execution fails if `balances[msg.sender]` < `tokens`
-	4. Transaction execution fails if `balances[to]` + `tokens` < `balances[to]`
+2. Derive an Ethereum address from `robert` key. This address will be used as `to` address.
+```
+token ethaddress drastic early glass silver head satoshi hammer dawn source rubber basic balcony civil dentist oxygen spice solid script know dial tired outside conduct siege
 
-* Add cobra CLI tests `deploy_test.go`,`query_test.go`,`transfer_test.go`,`name_test.go`
+Ethereum address is: 0x23F667B3f5Bc3893205B6A4edDd1D1A1629aE402
+```
+3. Make sure you have some tokens at sender address (`andrei` key).
+```
+token query 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7
 
-* Add more testing 
+Token balance of 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 is: 3847775300
+```
 
-* Fix `token name` error
+TODO address all edge cases (overflow, underflow etc, transfer to 0x0000, transfer to itself)
+
+#### Execution
+1. Input
+```
+token transfer 0x23F667B3f5Bc3893205B6A4edDd1D1A1629aE402 1000
+```
+2. Output
+```
+bigIntTokens 100
+100 tokens from 0xdded6aC7e0A13db5eE70810Bf07E4a875859e1A7 to 0x23F667B3f5Bc3893205B6A4edDd1D1A1629aE402 have been successfully transferred 
+tx hash: 0x404e9bf4fef733aef1b09e7f9f9bf1452f09f34d2740f606be68d59d0a64df68 
+```
+
+### TODO address all corner cases of `transfer` function:
+1. No value to pay for a gas to run `transfer tokens transaction`
+2. Transaction execution fails if `to` is 0 address.
+3. Transaction execution fails if `balances[msg.sender]` < `tokens`
+4. Transaction execution fails if `balances[to]` + `tokens` < `balances[to]`
+etc
+
 
 
 

@@ -36,8 +36,8 @@ func runQueryCmd(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	addr := args[0]
-	if err := clientCtx.Client.Query(addr); err != nil {
+	account := args[0]
+	if err := clientCtx.Client.Query(account); err != nil {
 		return err
 	}
 

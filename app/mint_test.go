@@ -33,7 +33,7 @@ func TestMint(t *testing.T) {
 	balAfter, err := instance.BalanceOf(&bind.CallOpts{}, ownerAddr)
 	require.NoError(t, err)
 
-	amountBigInt, err := bigIntFromStr(amount, false)
+	amountBigInt, err := bigIntFromStr(amount)
 	require.NoError(t, err)
 
 	sub := big.NewInt(0).Sub(balAfter, balBefore)

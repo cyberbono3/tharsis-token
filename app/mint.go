@@ -20,7 +20,7 @@ func (c *Client) Mint(address string, tokens string) error {
 		return err
 	}
 
-	amount, err := bigIntFromStr(tokens, true)
+	amount, err := bigIntFromStr(tokens)
 	if err != nil {
 		return err
 	}

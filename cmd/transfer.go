@@ -15,8 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/tharsis/token/app"
 )
@@ -42,8 +40,6 @@ func runTransferCmd(cmd *cobra.Command, args []string) error {
 	if err = clientCtx.Client.TransferTokens(to, tokens); err != nil {
 		return err
 	}
-
-	fmt.Println("transfer has been executed successfuly")
 
 	return nil
 }
